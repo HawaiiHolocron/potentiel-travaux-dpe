@@ -10,7 +10,7 @@ parcours au choix.
 > recomputed with the official 3CL method on real certificates from the national
 > ADEME database.*
 
-**[▶ Ouvrir la maquette interactive](https://romainyoung.github.io/potentiel-travaux-dpe/demo/)**
+**[▶ Ouvrir la maquette interactive](https://hawaiiholocron.github.io/potentiel-travaux-dpe/demo/)**
 · 5 logements réels de l'Indre, anonymisés.
 
 <p align="center"><img src="docs/capture.png" alt="Écran de résultat : étiquette E vers D, budget, économies, devis par corps de métier" width="360"></p>
