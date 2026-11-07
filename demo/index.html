@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Potentiel – démo</title>
+<meta name="description" content="Maquette interactive : potentiel de travaux de rénovation énergétique d'un logement à partir de son DPE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#15171C;--muted:#5B6070;--soft:#4A4F5C;--line:#E4E2DA;--paper:#F5F4EF;--card:#FFFFFF;--blue:#2448C9}
+*{box-sizing:border-box}
+body{margin:0;background:#E9E7E0;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+.demo-bar{max-width:440px;margin:0 auto;padding:16px 16px 0}
+.demo-bar label{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.demo-bar select{width:100%;height:44px;border-radius:12px;border:1px solid #CFCCC2;background:#fff;font:inherit;font-size:15px;padding:0 12px;color:var(--ink)}
+.demo-bar p{font-size:12px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+.app{max-width:440px;margin:16px auto 32px;background:var(--paper);border-radius:28px;padding:22px 18px 28px;display:flex;flex-direction:column;gap:14px}
+@media (max-width:480px){.app{border-radius:0;margin:12px 0 0}}
+h1,h2,.grotesk{font-family:'Space Grotesk',Inter,sans-serif}
+h1,h2{margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.header{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--ink);display:flex;align-items:center;justify-content:center}
+.brand{font-size:21px;font-weight:700;letter-spacing:-.01em;flex-grow:1}
+.icon-btn{width:44px;height:44px;border-radius:14px;border:1px solid #E1DFD7;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600}
+.ok{background:#E7F4EE;color:#0B5E40}
+.bad{background:#FDECEC;color:#8A1712}
+.row{display:flex;align-items:center;gap:8px}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted)}
+.scale{display:flex;flex-direction:column;gap:6px}
+.bar{height:28px;border-radius:7px;display:flex;align-items:center;padding-left:10px;font-family:'Space Grotesk',Inter,sans-serif;font-size:15px;font-weight:700;flex-shrink:0}
+.flag{display:flex;align-items:center;gap:5px;border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;white-space:nowrap}
+.flag.now{background:var(--ink);color:#fff}
+.flag.after{background:#fff;border:2px solid var(--ink);padding:2px 8px;font-weight:700}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:var(--paper);border-radius:14px;padding:11px 12px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-size:17px;font-weight:700;margin-top:2px}
+.status{display:flex;align-items:center;gap:8px;border-radius:12px;padding:10px 12px;font-size:14px;font-weight:600}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tab{min-height:64px;border-radius:16px;padding:10px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;font:inherit;background:#fff;color:var(--ink);border:2px solid #E1DFD7}
+.tab[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab b{font-size:15px}
+.tab span{display:flex;align-items:center;gap:5px;font-size:12px}
+.dot{width:10px;height:10px;border-radius:3px}
+.tile{display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;flex-shrink:0}
+.jump{background:var(--ink);color:#fff;border-radius:999px;padding:6px 12px;font-size:14px;font-weight:700;align-self:flex-start}
+.budget{background:var(--ink);color:#fff;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.budget .k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#C9CCD6}
+.budget .v{font-size:28px;font-weight:700;letter-spacing:-.01em}
+.budget .s{font-size:13px;color:#C9CCD6}
+.kpi{border-radius:16px;padding:12px}
+.kpi .k{font-size:12px;font-weight:600}.kpi .v{font-size:19px;font-weight:700;margin-top:2px}.kpi .s{font-size:13px}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;background:#FFF6D6;color:#5A4300;border:1px solid #F2D877;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600}
+.alert{display:flex;gap:10px;background:#FFF1E3;border:1px solid #F3B37A;border-radius:14px;padding:12px;font-size:13px;line-height:1.45;color:#5C2E00}
+.geste{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #EFEDE6}
+.geste .ic{width:28px;height:28px;border-radius:9px;background:#EEF1FB;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.geste .n{font-size:14px;font-weight:600;flex-grow:1}
+.geste .q{font-size:13px;color:var(--muted);white-space:nowrap}
+.trade .top{display:flex;justify-content:space-between;font-size:14px}
+.track{height:10px;border-radius:999px;background:#EDEBE4;overflow:hidden;margin-top:5px}
+.fill{height:10px;border-radius:999px;background:var(--blue)}
+.lines{max-height:250px;overflow-y:auto;border:1px solid #EFEDE6;border-radius:14px}
+.line{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid #EFEDE6}
+.line:last-child{border-bottom:none}
+.line .l{font-size:13px;line-height:1.35}.line .m{font-size:12px;color:var(--muted);margin-top:2px}
+.line .t{font-size:13px;font-weight:700;white-space:nowrap}
+.cta{height:48px;border-radius:14px;border:none;background:var(--ink);color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.photos{border:1px dashed #B9B6AC;align-items:center;justify-content:center;text-align:center;min-height:150px}
+footer{font-size:12px;line-height:1.5;color:var(--muted);padding:0 4px}
+</style>
+</head>
+<body>
+<div class="demo-bar">
+  <label for="bien">Logement de démonstration</label>
+  <select id="bien"></select>
+  <p>Cinq DPE réels de l'Indre, anonymisés. Étiquettes recalculées avec la méthode officielle 3CL ; prix d'artisans simulés.</p>
+</div>
+<main class="app" id="app" aria-live="polite"></main>
+<script>
+const LOGEMENTS = [{"numero": "masqué pour la démo", "titre": "Maison 60 m² · Indre", "sous": "Construite avant 1948 · chaudière gaz à condensation", "classe": "E", "ep": 287, "classe2027": "E", "ep2027": 285, "ges": "E", "facture": "1 402 €/an", "location": "Louable jusqu’en 2034", "parcours": [{"id": "express", "titre": "Express", "desc": "Isoler les murs, rien d’autre", "de": "E", "vers": "D", "vers2027": "D", "ep": 187, "ep2027": 185, "ges": "D", "sauts": 1, "facture": "920 €/an", "eco": "482 €/an", "ecoPct": "−34 %", "budget": "5 600 – 7 300 €", "total": "6 374 €", "retour": "≈ 13 ans", "location": "Louable sans échéance", "badges": ["Meilleur rapport €/classe", "Retour le plus rapide", "Sort de l’échéance location 2034"], "alerte": "", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "53 m²"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "4 452 €", "pct": 100}, {"nom": "Peintre", "montant": "1 272 €", "pct": 29}, {"nom": "Électricien", "montant": "650 €", "pct": 15}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "53 m² × 84 €", "total": "4 452 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "53 m² × 24 €", "total": "1 272 €"}]}, {"id": "equilibre", "titre": "Équilibre", "desc": "Murs isolés + chauffe-eau thermodynamique", "de": "E", "vers": "D", "vers2027": "D", "ep": 169, "ep2027": 166, "ges": "D", "sauts": 1, "facture": "859 €/an", "eco": "543 €/an", "ecoPct": "−39 %", "budget": "8 600 – 11 200 €", "total": "9 724 €", "retour": "≈ 18 ans", "location": "Louable sans échéance", "badges": ["Facture −39 %", "Louable sans échéance"], "alerte": "Le chauffe-eau baisse la consommation, mais le CO₂ reste en classe D : l’étiquette ne gagne rien de plus que l’Express.", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "53 m²"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "4 452 €", "pct": 100}, {"nom": "Plombier", "montant": "3 350 €", "pct": 75}, {"nom": "Peintre", "montant": "1 272 €", "pct": 29}, {"nom": "Électricien", "montant": "650 €", "pct": 15}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "53 m² × 84 €", "total": "4 452 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "53 m² × 24 €", "total": "1 272 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}, {"id": "grand_saut", "titre": "Grand saut", "desc": "Murs, pompe à chaleur et chauffe-eau : on sort du gaz", "de": "E", "vers": "C", "vers2027": "B", "ep": 117, "ep2027": 105, "ges": "A", "sauts": 2, "facture": "782 €/an", "eco": "620 €/an", "ecoPct": "−44 %", "budget": "20 600 – 27 000 €", "total": "23 454 €", "retour": "≈ 38 ans", "location": "Louable sans échéance", "badges": ["Classe B en 2027", "Climat : GES A"], "alerte": "La pompe à chaleur ne fait économiser que 77 €/an de plus que l’Équilibre, pour 13 730 € de plus : à réserver à un projet de long terme ou pour sortir du gaz.", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "53 m²"}, {"nom": "Pompe à chaleur air/eau", "qte": "1 appareil"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Chauffagiste", "montant": "13 250 €", "pct": 100}, {"nom": "Plaquiste-isolateur", "montant": "4 452 €", "pct": 34}, {"nom": "Plombier", "montant": "3 350 €", "pct": 25}, {"nom": "Peintre", "montant": "1 272 €", "pct": 10}, {"nom": "Électricien", "montant": "1 130 €", "pct": 9}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "53 m² × 84 €", "total": "4 452 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "53 m² × 24 €", "total": "1 272 €"}, {"libelle": "PAC air/eau sur radiateurs existants (puissance selon surface), mise en service", "corps": "Chauffagiste", "calc": "1 u × 12 800 €", "total": "12 800 €"}, {"libelle": "Dépose et évacuation de la chaudière", "corps": "Chauffagiste", "calc": "1 u × 450 €", "total": "450 €"}, {"libelle": "Ligne dédiée et protection", "corps": "Électricien", "calc": "1 u × 480 €", "total": "480 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}]}, {"numero": "masqué pour la démo", "titre": "Maison 122 m² · Indre", "sous": "Construite avant 1948 · poêle à bois + convecteurs", "classe": "F", "ep": 405, "classe2027": "F", "ep2027": 395, "ges": "C", "facture": "2 918 €/an", "location": "Location interdite dès 2028", "parcours": [{"id": "express", "titre": "Express", "desc": "Pompe à chaleur air/air dans toute la maison", "de": "F", "vers": "D", "vers2027": "C", "ep": 192, "ep2027": 172, "ges": "B", "sauts": 2, "facture": "2 679 €/an", "eco": "239 €/an", "ecoPct": "−8 %", "budget": "9 800 – 12 800 €", "total": "11 125 €", "retour": "≈ 46 ans", "location": "Louable sans échéance", "badges": ["Meilleur rapport €/classe", "+2 classes sans toucher aux murs", "Classe C en 2027"], "alerte": "Deux lettres gagnées, mais seulement 239 €/an d’économies : le bois coûte déjà peu. Utile pour louer, pas pour la facture.", "gestes": [{"nom": "Pompe à chaleur air/air", "qte": "5 splits"}], "corps": [{"nom": "Frigoriste", "montant": "10 750 €", "pct": 100}, {"nom": "Électricien", "montant": "375 €", "pct": 3}], "lignes": [{"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "5 split × 2 150 €", "total": "10 750 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "375 €"}]}, {"id": "equilibre", "titre": "Équilibre", "desc": "Murs isolés + chauffe-eau thermodynamique", "de": "F", "vers": "D", "vers2027": "D", "ep": 188, "ep2027": 184, "ges": "B", "sauts": 2, "facture": "1 330 €/an", "eco": "1 588 €/an", "ecoPct": "−54 %", "budget": "20 000 – 26 100 €", "total": "22 684 €", "retour": "≈ 14 ans", "location": "Louable sans échéance", "badges": ["Facture −54 %", "Retour le plus rapide"], "alerte": "", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "173 m²"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "14 532 €", "pct": 100}, {"nom": "Peintre", "montant": "4 152 €", "pct": 29}, {"nom": "Plombier", "montant": "3 350 €", "pct": 23}, {"nom": "Électricien", "montant": "650 €", "pct": 4}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "173 m² × 84 €", "total": "14 532 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "173 m² × 24 €", "total": "4 152 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}, {"id": "grand_saut", "titre": "Grand saut", "desc": "Murs, pompe à chaleur, chauffe-eau et fenêtres", "de": "F", "vers": "B", "vers2027": "B", "ep": 84, "ep2027": 75, "ges": "A", "sauts": 4, "facture": "1 170 €/an", "eco": "1 748 €/an", "ecoPct": "−60 %", "budget": "33 700 – 44 000 €", "total": "38 297 €", "retour": "≈ 22 ans", "location": "Louable sans échéance", "badges": ["F → B : +4 classes", "Climat : GES A"], "alerte": "", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "173 m²"}, {"nom": "Pompe à chaleur air/air", "qte": "5 splits"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}, {"nom": "Remplacement des fenêtres", "qte": "8 fenêtres · 7 m²"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "14 532 €", "pct": 100}, {"nom": "Frigoriste", "montant": "10 750 €", "pct": 74}, {"nom": "Menuisier", "montant": "4 488 €", "pct": 31}, {"nom": "Peintre", "montant": "4 152 €", "pct": 29}, {"nom": "Plombier", "montant": "3 350 €", "pct": 23}, {"nom": "Électricien", "montant": "1 025 €", "pct": 7}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "173 m² × 84 €", "total": "14 532 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "173 m² × 24 €", "total": "4 152 €"}, {"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "5 split × 2 150 €", "total": "10 750 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "375 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}, {"libelle": "Fenêtre PVC double vitrage Uw 1,3, dépose et pose en rénovation", "corps": "Menuisier", "calc": "6,6 m² × 680 €", "total": "4 488 €"}]}]}, {"numero": "masqué pour la démo", "titre": "Appartement 66 m² · Indre", "sous": "Centre ancien, avant 1948 · chaudière gaz + PAC + radiateurs", "classe": "G", "ep": 434, "classe2027": "F", "ep2027": 401, "ges": "D", "facture": "3 204 €/an", "location": "Location interdite depuis 2025", "parcours": [{"id": "express", "titre": "Express", "desc": "Isoler les combles au-dessus de l’appartement", "de": "G", "vers": "F", "vers2027": "E", "ep": 349, "ep2027": 322, "ges": "D", "sauts": 1, "facture": "2 572 €/an", "eco": "632 €/an", "ecoPct": "−20 %", "budget": "1 300 – 1 700 €", "total": "1 459 €", "retour": "≈ 2 ans", "location": "Location interdite dès 2028", "badges": ["Meilleur rapport €/classe", "Retour le plus rapide", "Classe E en 2027"], "alerte": "Combles communs : accord de la copropriété nécessaire avant travaux.", "gestes": [{"nom": "Isolation des combles", "qte": "46 m²"}], "corps": [{"nom": "Isolateur", "montant": "1 459 €", "pct": 100}], "lignes": [{"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "45,6 m² × 32 €", "total": "1 459 €"}]}, {"id": "equilibre", "titre": "Équilibre", "desc": "Combles + murs isolés par l’intérieur", "de": "G", "vers": "D", "vers2027": "D", "ep": 204, "ep2027": 187, "ges": "C", "sauts": 3, "facture": "1 500 €/an", "eco": "1 704 €/an", "ecoPct": "−53 %", "budget": "9 000 – 11 700 €", "total": "10 199 €", "retour": "≈ 6 ans", "location": "Louable sans échéance", "badges": ["G → D : +3 classes", "Facture −53 %"], "alerte": "", "gestes": [{"nom": "Isolation des combles", "qte": "46 m²"}, {"nom": "Isolation des murs par l'intérieur", "qte": "77 m²"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "6 502 €", "pct": 100}, {"nom": "Peintre", "montant": "1 858 €", "pct": 29}, {"nom": "Isolateur", "montant": "1 459 €", "pct": 22}, {"nom": "Électricien", "montant": "380 €", "pct": 6}], "lignes": [{"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "45,6 m² × 32 €", "total": "1 459 €"}, {"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "77,4 m² × 84 €", "total": "6 502 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "380 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "77,4 m² × 24 €", "total": "1 858 €"}]}, {"id": "grand_saut", "titre": "Grand saut", "desc": "Toute l’enveloppe, pompe à chaleur et chauffe-eau", "de": "G", "vers": "B", "vers2027": "B", "ep": 96, "ep2027": 86, "ges": "A", "sauts": 5, "facture": "697 €/an", "eco": "2 507 €/an", "ecoPct": "−78 %", "budget": "16 400 – 21 500 €", "total": "18 679 €", "retour": "≈ 8 ans", "location": "Louable sans échéance", "badges": ["G → B : +5 classes", "Facture −78 %"], "alerte": "", "gestes": [{"nom": "Isolation des combles", "qte": "46 m²"}, {"nom": "Isolation des murs par l'intérieur", "qte": "77 m²"}, {"nom": "Isolation du plancher bas", "qte": "13 m²"}, {"nom": "Pompe à chaleur air/air", "qte": "2 splits"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "6 502 €", "pct": 100}, {"nom": "Frigoriste", "montant": "4 300 €", "pct": 66}, {"nom": "Plombier", "montant": "3 350 €", "pct": 52}, {"nom": "Isolateur", "montant": "2 049 €", "pct": 32}, {"nom": "Peintre", "montant": "1 858 €", "pct": 29}, {"nom": "Électricien", "montant": "620 €", "pct": 10}], "lignes": [{"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "45,6 m² × 32 €", "total": "1 459 €"}, {"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "77,4 m² × 84 €", "total": "6 502 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "380 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "77,4 m² × 24 €", "total": "1 858 €"}, {"libelle": "Isolation du plancher bas en sous-face R 3", "corps": "Isolateur", "calc": "13,1 m² × 45 €", "total": "590 €"}, {"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "2 split × 2 150 €", "total": "4 300 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "240 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}]}, {"numero": "masqué pour la démo", "titre": "Maison de maître 378 m² · Indre", "sous": "Bâti ancien (vers 1900) · chaudière fioul + poêle à bois. Le DPE couvre la maison principale, pas les dépendances.", "classe": "F", "ep": 328, "classe2027": "F", "ep2027": 324, "ges": "F", "facture": "14 533 €/an", "location": "Location interdite dès 2028", "parcours": [{"id": "express", "titre": "Express", "desc": "Remplacer la production d’eau chaude au fioul par un chauffe-eau thermodynamique", "de": "F", "vers": "E", "vers2027": "E", "ep": 322, "ep2027": 317, "ges": "E", "sauts": 1, "facture": "14 113 €/an", "eco": "420 €/an", "ecoPct": "−3 %", "budget": "2 900 – 3 900 €", "total": "3 350 €", "retour": "≈ 8 ans", "location": "Louable jusqu’en 2034", "badges": ["Meilleur rapport €/classe", "Sort de F pour 3 350 €", "Louable jusqu’en 2034"], "alerte": "Cette maison n’est en F qu’à cause du CO₂ (70,2 kg/m² pour une limite à 70) : retirer le fioul de l’eau chaude suffit à passer en E.", "gestes": [{"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Plombier", "montant": "3 350 €", "pct": 100}], "lignes": [{"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}, {"id": "equilibre", "titre": "Équilibre", "desc": "Pompe à chaleur à la place du fioul, chauffe-eau et combles", "de": "F", "vers": "D", "vers2027": "D", "ep": 217, "ep2027": 202, "ges": "B", "sauts": 2, "facture": "7 202 €/an", "eco": "7 331 €/an", "ecoPct": "−50 %", "budget": "31 200 – 40 800 €", "total": "35 489 €", "retour": "≈ 5 ans", "location": "Louable sans échéance", "badges": ["Retour le plus rapide", "Facture divisée par 2", "Adieu le fioul"], "alerte": "", "gestes": [{"nom": "Pompe à chaleur air/eau", "qte": "1 appareil"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}, {"nom": "Isolation des combles", "qte": "211 m²"}], "corps": [{"nom": "Chauffagiste", "montant": "24 920 €", "pct": 100}, {"nom": "Isolateur", "montant": "6 739 €", "pct": 27}, {"nom": "Plombier", "montant": "3 350 €", "pct": 13}, {"nom": "Électricien", "montant": "480 €", "pct": 2}], "lignes": [{"libelle": "PAC air/eau sur radiateurs existants (puissance selon surface), mise en service", "corps": "Chauffagiste", "calc": "1 u × 24 470 €", "total": "24 470 €"}, {"libelle": "Dépose et évacuation de la chaudière", "corps": "Chauffagiste", "calc": "1 u × 450 €", "total": "450 €"}, {"libelle": "Ligne dédiée et protection", "corps": "Électricien", "calc": "1 u × 480 €", "total": "480 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}, {"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "210,6 m² × 32 €", "total": "6 739 €"}]}, {"id": "grand_saut", "titre": "Grand saut", "desc": "Toute l’enveloppe, 30 fenêtres, pompe à chaleur et chauffe-eau", "de": "F", "vers": "B", "vers2027": "B", "ep": 90, "ep2027": 84, "ges": "A", "sauts": 4, "facture": "3 059 €/an", "eco": "11 474 €/an", "ecoPct": "−79 %", "budget": "110 200 – 144 100 €", "total": "125 271 €", "retour": "≈ 11 ans", "location": "Louable sans échéance", "badges": ["F → B : +4 classes", "Climat : GES A"], "alerte": "Bâti de caractère : l’isolation intérieure (422 m² de murs) et le remplacement des 30 fenêtres touchent au cachet. Vérifier les contraintes patrimoniales (périmètre protégé, ABF) avant tout projet.", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "422 m²"}, {"nom": "Isolation des combles", "qte": "211 m²"}, {"nom": "Remplacement des fenêtres", "qte": "30 fenêtres · 64 m²"}, {"nom": "Pompe à chaleur air/eau", "qte": "1 appareil"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Menuisier", "montant": "43 588 €", "pct": 100}, {"nom": "Plaquiste-isolateur", "montant": "35 423 €", "pct": 81}, {"nom": "Chauffagiste", "montant": "24 920 €", "pct": 57}, {"nom": "Peintre", "montant": "10 121 €", "pct": 23}, {"nom": "Isolateur", "montant": "6 739 €", "pct": 15}, {"nom": "Plombier", "montant": "3 350 €", "pct": 8}, {"nom": "Électricien", "montant": "1 130 €", "pct": 3}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "421,7 m² × 84 €", "total": "35 423 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "421,7 m² × 24 €", "total": "10 121 €"}, {"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "210,6 m² × 32 €", "total": "6 739 €"}, {"libelle": "Fenêtre PVC double vitrage Uw 1,3, dépose et pose en rénovation", "corps": "Menuisier", "calc": "64,1 m² × 680 €", "total": "43 588 €"}, {"libelle": "PAC air/eau sur radiateurs existants (puissance selon surface), mise en service", "corps": "Chauffagiste", "calc": "1 u × 24 470 €", "total": "24 470 €"}, {"libelle": "Dépose et évacuation de la chaudière", "corps": "Chauffagiste", "calc": "1 u × 450 €", "total": "450 €"}, {"libelle": "Ligne dédiée et protection", "corps": "Électricien", "calc": "1 u × 480 €", "total": "480 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}]}, {"numero": "masqué pour la démo", "titre": "Maison 49 m² · Indre", "sous": "Plain-pied de 1938 · convecteurs électriques · petit prix, « à rénover entièrement »", "classe": "G", "ep": 438, "classe2027": "F", "ep2027": 392, "ges": "C", "facture": "2 487 €/an", "location": "Location interdite depuis 2025", "parcours": [{"id": "express", "titre": "Express", "desc": "Remplacer les convecteurs par une pompe à chaleur air/air", "de": "G", "vers": "D", "vers2027": "D", "ep": 213, "ep2027": 190, "ges": "B", "sauts": 3, "facture": "1 292 €/an", "eco": "1 195 €/an", "ecoPct": "−48 %", "budget": "4 000 – 5 200 €", "total": "4 540 €", "retour": "≈ 4 ans", "location": "Louable sans échéance", "badges": ["Meilleur rapport €/classe", "Retour le plus rapide", "G → D : +3 classes"], "alerte": "Les travaux (4 540 €) représentent près d’un quart du prix d’achat annoncé : à intégrer dans l’offre.", "gestes": [{"nom": "Pompe à chaleur air/air", "qte": "2 splits"}], "corps": [{"nom": "Frigoriste", "montant": "4 300 €", "pct": 100}, {"nom": "Électricien", "montant": "240 €", "pct": 6}], "lignes": [{"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "2 split × 2 150 €", "total": "4 300 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "240 €"}]}, {"id": "equilibre", "titre": "Équilibre", "desc": "Pompe à chaleur + murs isolés par l’intérieur", "de": "G", "vers": "C", "vers2027": "C", "ep": 159, "ep2027": 142, "ges": "B", "sauts": 4, "facture": "1 006 €/an", "eco": "1 481 €/an", "ecoPct": "−60 %", "budget": "10 300 – 13 400 €", "total": "11 660 €", "retour": "≈ 8 ans", "location": "Louable sans échéance", "badges": ["G → C : +4 classes", "Facture −60 %"], "alerte": "", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "60 m²"}, {"nom": "Pompe à chaleur air/air", "qte": "2 splits"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "5 032 €", "pct": 100}, {"nom": "Frigoriste", "montant": "4 300 €", "pct": 85}, {"nom": "Peintre", "montant": "1 438 €", "pct": 29}, {"nom": "Électricien", "montant": "890 €", "pct": 18}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "59,9 m² × 84 €", "total": "5 032 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "59,9 m² × 24 €", "total": "1 438 €"}, {"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "2 split × 2 150 €", "total": "4 300 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "240 €"}]}, {"id": "grand_saut", "titre": "Grand saut", "desc": "Murs, combles, pompe à chaleur et chauffe-eau", "de": "G", "vers": "B", "vers2027": "B", "ep": 102, "ep2027": 91, "ges": "A", "sauts": 5, "facture": "703 €/an", "eco": "1 784 €/an", "ecoPct": "−72 %", "budget": "14 600 – 19 100 €", "total": "16 572 €", "retour": "≈ 9 ans", "location": "Louable sans échéance", "badges": ["G → B : +5 classes", "Facture −72 %"], "alerte": "Budget proche du prix de la maison, et l’annonce la dit « à rénover entièrement » : faire chiffrer aussi le gros œuvre (toiture, électricité, sanitaires).", "gestes": [{"nom": "Isolation des murs par l'intérieur", "qte": "60 m²"}, {"nom": "Isolation des combles", "qte": "49 m²"}, {"nom": "Pompe à chaleur air/air", "qte": "2 splits"}, {"nom": "Chauffe-eau thermodynamique", "qte": "1 appareil"}], "corps": [{"nom": "Plaquiste-isolateur", "montant": "5 032 €", "pct": 100}, {"nom": "Frigoriste", "montant": "4 300 €", "pct": 85}, {"nom": "Plombier", "montant": "3 350 €", "pct": 67}, {"nom": "Isolateur", "montant": "1 562 €", "pct": 31}, {"nom": "Peintre", "montant": "1 438 €", "pct": 29}, {"nom": "Électricien", "montant": "890 €", "pct": 18}], "lignes": [{"libelle": "Doublage isolant biosourcé perspirant (fibre de bois) R 3,7 + plaque, adapté au mur ancien", "corps": "Plaquiste-isolateur", "calc": "59,9 m² × 84 €", "total": "5 032 €"}, {"libelle": "Déplacement des prises et interrupteurs sur murs doublés", "corps": "Électricien", "calc": "forfait", "total": "650 €"}, {"libelle": "Enduit et peinture des murs doublés", "corps": "Peintre", "calc": "59,9 m² × 24 €", "total": "1 438 €"}, {"libelle": "Isolation des combles perdus par soufflage R 7", "corps": "Isolateur", "calc": "48,8 m² × 32 €", "total": "1 562 €"}, {"libelle": "Unité extérieure + splits muraux (1 split pour 25 m²)", "corps": "Frigoriste", "calc": "2 split × 2 150 €", "total": "4 300 €"}, {"libelle": "Dépose des convecteurs et ligne dédiée", "corps": "Électricien", "calc": "forfait", "total": "240 €"}, {"libelle": "Chauffe-eau thermodynamique 200 L, raccordement et dépose de l'ancien", "corps": "Plombier", "calc": "1 u × 3 350 €", "total": "3 350 €"}]}]}];
+const COUL = {A:{bg:"#009C6D",fg:"#FFFFFF"},B:{bg:"#52B153",fg:"#15171C"},C:{bg:"#78BD76",fg:"#15171C"},D:{bg:"#F4E70F",fg:"#15171C"},E:{bg:"#F0B50F",fg:"#15171C"},F:{bg:"#EB8235",fg:"#15171C"},G:{bg:"#D7221F",fg:"#FFFFFF"}};
+const I = {
+  home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg>',
+  share:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#15171C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 14v6h14v-6"/></svg>',
+  check:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  left:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>',
+  key:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>',
+  arrow:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#15171C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>',
+  star:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+  warn:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B4530A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M12 3 2 20h20z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
+  tool:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2448C9" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/></svg>',
+  img:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5B6070" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>'
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tile = (c, size, font) => `<div class="tile" style="width:${size}px;height:${size}px;border-radius:${Math.round(size/4.5)}px;background:${COUL[c].bg};color:${COUL[c].fg};font-size:${font}px">${c}</div>`;
+const status = (prefix, txt) => {
+  const bad = txt.includes('interdite');
+  return `<div class="status ${bad ? 'bad' : 'ok'}">${I.key}${prefix} : ${esc(txt)}</div>`;
+};
+
+const state = { bien: 0, sel: 1 };
+const select = document.getElementById('bien');
+select.innerHTML = LOGEMENTS.map((l, i) => `<option value="${i}">${esc(l.titre)} · classe ${l.classe}</option>`).join('');
+select.addEventListener('change', () => { state.bien = +select.value; state.sel = 1; render(); });
+
+function render() {
+  const L = LOGEMENTS[state.bien];
+  const P = L.parcours[state.sel];
+  const echelle = ['A','B','C','D','E','F','G'].map((c, i) => `
+    <div class="row" style="height:28px">
+      <div class="bar" style="width:${52 + i*14}px;background:${COUL[c].bg};color:${COUL[c].fg}">${c}</div>
+      ${c === L.classe ? `<div class="flag now">${I.left}Aujourd'hui · ${L.ep}</div>` : ''}
+      ${c === P.vers ? `<div class="flag after">${I.left}${esc(P.titre)} · ${P.ep}</div>` : ''}
+    </div>`).join('');
+  const tabs = L.parcours.map((t, i) => `
+    <button type="button" class="tab" data-i="${i}" aria-pressed="${i === state.sel}">
+      <b>${esc(t.titre)}</b>
+      <span><span class="dot" style="background:${COUL[t.vers].bg}"></span>${t.de} → ${t.vers}</span>
+    </button>`).join('');
+  const sauts = '+' + P.sauts + ' classe' + (P.sauts > 1 ? 's' : '');
+
+  document.getElementById('app').innerHTML = `
+  <header class="header">
+    <div class="logo">${I.home}</div>
+    <div class="brand grotesk">Potentiel</div>
+    <button type="button" class="icon-btn" aria-label="Partager le résultat">${I.share}</button>
+  </header>
+
+  <section class="card" style="gap:8px">
+    <div class="eyebrow">Annonce analysée</div>
+    <h1 style="font-size:23px;line-height:1.15">${esc(L.titre)}</h1>
+    <div style="font-size:14px;color:var(--soft);line-height:1.4">${esc(L.sous)}</div>
+    <div class="row" style="flex-wrap:wrap;margin-top:4px">
+      <span class="pill ok">${I.check}DPE officiel retrouvé</span>
+      <span class="mono">N° ${esc(L.numero)}</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div style="display:flex;align-items:baseline;justify-content:space-between">
+      <h2 style="font-size:18px">L'étiquette, avant et après</h2>
+      <div style="font-size:12px;color:var(--muted)">kWh/m²/an</div>
+    </div>
+    <div class="scale">${echelle}</div>
+    <div class="grid2">
+      <div class="stat"><div class="k">Facture énergie actuelle</div><div class="v">${esc(L.facture)}</div></div>
+      <div class="stat"><div class="k">En 2027 sans travaux</div><div class="v">Classe ${L.classe2027} · ${L.ep2027}</div></div>
+    </div>
+    ${status("Aujourd'hui", L.location)}
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <h2 style="font-size:18px;margin:0 4px">Choisissez votre parcours</h2>
+    <div class="tabs">${tabs}</div>
+  </section>
+
+  <section class="card" style="gap:14px">
+    <div style="font-size:15px;color:var(--soft);line-height:1.4">${esc(P.desc)}</div>
+    <div class="row" style="gap:12px">
+      ${tile(P.de, 70, 38)}${I.arrow}${tile(P.vers, 92, 52)}
+      <div style="display:flex;flex-direction:column;gap:6px;margin-left:4px">
+        <div class="jump">${sauts}</div>
+        <div style="font-size:13px;color:var(--soft)">${L.ep} → ${P.ep} kWh/m²/an</div>
+      </div>
+    </div>
+    <div class="row" style="gap:10px;background:var(--paper);border-radius:14px;padding:10px 12px">
+      ${tile(P.vers2027, 34, 18)}
+      <div style="font-size:13px;line-height:1.35;color:#2C303A">En 2027, avec le nouveau calcul de l'électricité : classe <strong>${P.vers2027}</strong> (${P.ep2027} kWh/m²/an)</div>
+    </div>
+    <div class="budget">
+      <div class="k">Budget estimé</div>
+      <div class="v grotesk">${esc(P.budget)}</div>
+      <div class="s">Devis simulé : ${esc(P.total)} TTC, hors aides</div>
+    </div>
+    <div class="grid2">
+      <div class="kpi" style="background:#E7F4EE;color:#0B5E40"><div class="k">Économies</div><div class="v">${esc(P.eco)}</div><div class="s">facture ${esc(P.ecoPct)}</div></div>
+      <div class="kpi" style="background:#EEF1FB;color:#1F3A99"><div class="k">Rentabilisé en</div><div class="v">${esc(P.retour)}</div><div class="s">hors aides</div></div>
+    </div>
+    <div class="badges">${P.badges.map(b => `<div class="badge">${I.star}${esc(b)}</div>`).join('')}</div>
+    ${P.alerte ? `<div class="alert">${I.warn}<div>${esc(P.alerte)}</div></div>` : ''}
+    ${status('Après travaux', P.location)}
+  </section>
+
+  <section class="card" style="gap:10px">
+    <h2 style="font-size:18px">Les travaux</h2>
+    ${P.gestes.map(g => `<div class="geste"><div class="ic">${I.tool}</div><div class="n">${esc(g.nom)}</div><div class="q">${esc(g.qte)}</div></div>`).join('')}
+  </section>
+
+  <section class="card">
+    <div>
+      <h2 style="font-size:18px">Devis par corps de métier</h2>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px">Prix d'artisans simulés · TTC, TVA 5,5 % · hors aides</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${P.corps.map(c => `<div class="trade"><div class="top"><span style="font-weight:600">${esc(c.nom)}</span><span style="font-weight:700">${esc(c.montant)}</span></div><div class="track"><div class="fill" style="width:${c.pct}%"></div></div></div>`).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:10px">
+      <span style="font-size:14px;font-weight:600">Total</span>
+      <span class="grotesk" style="font-size:22px;font-weight:700">${esc(P.total)}</span>
+    </div>
+    <div class="eyebrow" style="letter-spacing:.06em">Détail des lignes</div>
+    <div class="lines">
+      ${P.lignes.map(l => `<div class="line"><div style="flex-grow:1;min-width:0"><div class="l">${esc(l.libelle)}</div><div class="m">${esc(l.corps)} · ${esc(l.calc)}</div></div><div class="t">${esc(l.total)}</div></div>`).join('')}
+    </div>
+    <button type="button" class="cta">Demander les vrais devis aux artisans</button>
+  </section>
+
+  <section class="card photos">
+    ${I.img}
+    <div style="font-size:15px;font-weight:700">Photos avant / après</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.4">[À venir] Générées à partir des photos de l'annonce.<br>Visualisation non contractuelle.</div>
+  </section>
+
+  <footer>Estimation indicative, pas un devis. Étiquettes recalculées avec la méthode officielle 3CL (moteur Open3CL) à partir du DPE enregistré à l'ADEME. Prix d'artisans simulés pour la démonstration ; économies calculées aux prix conventionnels du DPE.</footer>`;
+
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+    state.sel = +b.dataset.i; render();
+    const t = document.querySelector(`.tab[data-i="${state.sel}"]`); if (t) t.focus();
+  }));
+}
+render();
+</script>
+</body>
+</html>
